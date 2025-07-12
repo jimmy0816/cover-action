@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掩護抽獎 - 爸爸的購物神器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #6c63ff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #6c63ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="gift" patternUnits="userSpaceOnUse" width="20" height="20"><rect width="20" height="20" fill="none"/><text x="10" y="15" text-anchor="middle" fill="rgba(255,255,255,0.1)" font-size="12">🎁</text></pattern></defs><rect width="100" height="100" fill="url(%23gift)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .problem h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .problem-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .solution h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .solution-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .step-number {
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.popular {
+            border: 3px solid #6c63ff;
+        }
+
+        .popular-badge {
+            background: #6c63ff;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #6c63ff;
+            margin: 1rem 0;
+        }
+
+        .price-detail {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .problem-grid,
+            .solution-steps,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">🎯 掩護抽獎</a>
+            <ul class="nav-links">
+                <li><a href="#home">首頁</a></li>
+                <li><a href="#how-it-works">如何運作</a></li>
+                <li><a href="#features">功能特色</a></li>
+                <li><a href="#pricing">方案價格</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1>爸爸的購物神器</h1>
+                <p class="subtitle">買自己想要的東西，讓老婆看起來像是抽獎得到的</p>
+                <div class="hero-tagline">
+                    ✨ 專業包裝 • 完美掩護 • 老婆安心 ✨
+                </div>
+                <a href="#pricing" class="cta-button">立即體驗掩護服務</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="container">
+            <h2>爸爸們的共同煩惱</h2>
+            <div class="problem-grid">
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">😅</div>
+                    <h3>想買但不敢買</h3>
+                    <p>看到心儀的 PS5、相機、球鞋，但怕老婆說「又亂花錢」</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">🤔</div>
+                    <h3>編故事很困難</h3>
+                    <p>想說是「朋友送的」或「公司抽獎」，但總是破綻百出</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">😰</div>
+                    <h3>怕被發現真相</h3>
+                    <p>沒有完整的「中獎證明」，老婆一查就露餡了</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="how-it-works">
+        <div class="container">
+            <h2>我們的解決方案</h2>
+            <div class="solution-steps">
+                <div class="step-card fade-in">
+                    <div class="step-number">1</div>
+                    <h3>選擇商品</h3>
+                    <p>在平台上挑選你想要的商品，或輸入商品網址</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">2</div>
+                    <h3>客製掩護</h3>
+                    <p>選擇中獎活動風格，填寫收件人資訊</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">3</div>
+                    <h3>專業包裝</h3>
+                    <p>我們幫你製作完整的中獎證明和包裝</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">4</div>
+                    <h3>完美送達</h3>
+                    <p>商品以「中獎包裹」形式送到家，老婆也信服</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2>為什麼選擇我們？</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📋</div>
+                    <h3>專業中獎證明</h3>
+                    <p>客製化 PDF 證明文件，活動名稱、日期、獎項完全客製</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📦</div>
+                    <h3>完整包裝服務</h3>
+                    <p>外箱貼紙、內附文件、隨機小禮品，看起來就像真的中獎</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🌐</div>
+                    <h3>活動查詢頁面</h3>
+                    <p>提供可查詢的活動網址，讓老婆也能上網「驗證」</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎁</div>
+                    <h3>多樣活動風格</h3>
+                    <p>便利商店、藥局、信用卡等多種抽獎活動風格可選</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">⚡</div>
+                    <h3>快速出貨</h3>
+                    <p>24-48小時內完成包裝並出貨</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔒</div>
+                    <h3>隱私保護</h3>
+                    <p>完全保密服務，不會有任何資訊洩露</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>選擇最適合的方案</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card fade-in">
+                    <h3>單次體驗</h3>
+                    <div class="price">NT$399</div>
+                    <div class="price-detail">+ 商品代購價</div>
+                    <ul class="pricing-features">
+                        <li>✅ 客製中獎證明</li>
+                        <li>✅ 專業包裝服務</li>
+                        <li>✅ 活動查詢頁面</li>
+                        <li>✅ 隨機小禮品</li>
+                    </ul>
+                    <a href="#" class="cta-button">立即下單</a>
+                </div>
+                <div class="pricing-card popular fade-in">
+                    <div class="popular-badge">最受歡迎</div>
+                    <h3>月付會員</h3>
+                    <div class="price">NT$499</div>
+                    <div class="price-detail">每月 1 次服務</div>
+                    <ul class="pricing-features">
+                        <li>✅ 包含單次所有服務</li>
+                        <li>✅ 優先處理訂單</li>
+                        <li>✅ 客製化文案</li>
+                        <li>✅ 專屬客服支援</li>
+                        <li>✅ 無限次證明重製</li>
+                    </ul>
+                    <a href="#" class="cta-button">開始會員</a>
+                </div>
+                <div class="pricing-card fade-in">
+                    <h3>VIP 尊榮</h3>
+                    <div class="price">NT$999</div>
+                    <div class="price-detail">每月 3 次服務</div>
+                    <ul class="pricing-features">
+                        <li>✅ 包含會員所有服務</li>
+                        <li>✅ 24小時緊急出貨</li>
+                        <li>✅ 專屬活動風格設計</li>
+                        <li>✅ 一對一服務顧問</li>
+                        <li>✅ 客製化小禮品</li>
+                    </ul>
+                    <a href="#" class="cta-button">升級 VIP</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 掩護抽獎. 專為爸爸們打造的貼心服務</p>
+            <p>讓每一次購物都變成驚喜，讓每一個家庭都更和諧 ❤️</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.problem-card, .step-card, .feature-card, .pricing-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // CTA button interactions
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('感謝您的興趣！目前服務正在準備中，請留下聯絡方式，我們將優先通知您！');
+            });
+        });
+    </script>
+</body>
+</html>
